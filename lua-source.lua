@@ -1424,7 +1424,7 @@ local function TopbarButtons()
 	MainFrame.Minimize.MouseLeave:Connect(function()
 		TweenButton(MainFrame.Minimize,Color3.fromRGB(255, 233, 111))
 	end)
-	MainFrame.Minimize.Activated:Connect(function()
+	MainFrame.Minimize.MouseButton1Click:Connect(function()
 		IsOpen = not IsOpen
 		MinimizeHandler(IsOpen)
 	end)
@@ -1434,7 +1434,7 @@ local function TopbarButtons()
 	MainFrame.Close.MouseLeave:Connect(function()
 		TweenButton(MainFrame.Close,Color3.fromRGB(255, 101, 101))
 	end)
-	MainFrame.Close.Activated:Connect(function()
+	MainFrame.Close.MouseButton1Click:Connect(function()
 		MainFrame.Visible = not MainFrame.Visible
 	end)
 end
@@ -1530,7 +1530,7 @@ local function PageAndChipHandler()
 			chip.MouseLeave:Connect(function()
 				ChipHover(chip,false)
 			end)
-			chip.Activated:Connect(function()
+			chip.MouseButton1Click:Connect(function()
 				ChangePage(chip.Name)
 			end)
 		end
@@ -1574,13 +1574,7 @@ function dragify(Frame)
 	end)
 end
 
-
-
-PageAndChipHandler()
-TopbarButtons()
-dragify(MainFrame)
-
-UnlockAllButton.Activated:Connect(function()
+UnlockAllButton.MouseButton1Click:Connect(function()
 	local function UnlockAllV2()
 		local function UnlockDevCharacters()
 			local function Unlock()
@@ -1615,7 +1609,7 @@ UnlockAllButton.Activated:Connect(function()
 	UnlockAllV2()
 end)
 
-JumpscareSpamButton.Activated:Connect(function()
+JumpscareSpamButton.MouseButton1Click:Connect(function()
 	local args = {
 		[1] = game:GetService("Players").LocalPlayer.Character.LowerTorso,
 		[2] = workspace:WaitForChild(game:GetService("Players").LocalPlayer.Name)
@@ -1628,7 +1622,7 @@ JumpscareSpamButton.Activated:Connect(function()
 	end
 end)
 
-AllwaysJumpscareButton.Activated:Connect(function()
+AllwaysJumpscareButton.MouseButton1Click:Connect(function()
 	local Players = game:GetService("Players")
 	local Player = Players.LocalPlayer
 	local PlayerGui = Player.PlayerGui
@@ -1641,10 +1635,6 @@ AllwaysJumpscareButton.Activated:Connect(function()
 		end
 		task.wait(1)
 	end)
-end)
-
-OpenIY.Activated:Connect(function()
-	loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
 end)
 
 local function MusicHandler()
@@ -1668,7 +1658,7 @@ local function MusicHandler()
 			end
 		end
 	end
-	MusicPlayStopButton.Activated:Connect(function()
+	MusicPlayStopButton.MouseButton1Click:Connect(function()
 		if MusicValid == true then
 			SetMusic(MusicTextArea.Text)
 		end
@@ -1697,13 +1687,12 @@ local function MusicHandler()
 	MusicTextArea.FocusLost:Connect(function()
 		ValidateSong(MusicTextArea.Text)
 	end)
-	MusicFixButton.Activated:Connect(function()
+	MusicFixButton.MouseButton1Click:Connect(function()
 		playing = false
 		TextLabel_18.Text = "PLAY"
 	end)
 end
-MusicHandler()
-
+coroutine.wrap(MusicHandler)()
 local function NameTagAdvancerHandler()
 	local NametagActive = false
 	local function RainbowNameTag()
@@ -1797,13 +1786,19 @@ local function NameTagAdvancerHandler()
 	end
 	
 	
-	NametagStopButton.Activated:Connect(function()
+	NametagStopButton.MouseButton1Click:Connect(function()
 		NametagActive = false
 	end)
-	NametagRainbowButton.Activated:Connect(RainbowNameTag)
-	NametagSwapperButton.Activated:Connect(SwapperNameTag)
+	NametagRainbowButton.MouseButton1Click:Connect(RainbowNameTag)
+	NametagSwapperButton.MouseButton1Click:Connect(SwapperNameTag)
 end
 
-coroutine.wrap(function()
-	NameTagAdvancerHandler()
-end)()
+coroutine.wrap(NameTagAdvancerHandler)()
+
+PageAndChipHandler()
+TopbarButtons()
+dragify(MainFrame)
+
+OpenIY.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+end)
