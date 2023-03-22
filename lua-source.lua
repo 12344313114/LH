@@ -1362,6 +1362,7 @@ local function createStroke(ObjectForStroke)
 	Stroke.Color = Color3.fromRGB(255, 255, 255)
 	Stroke.Transparency = 0.7
 	Stroke.Thickness = 2
+	Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 end
 
 for _,chipto in pairs(Chips:GetChildren()) do
@@ -1617,7 +1618,7 @@ UnlockAllButton.Activated:Connect(function()
 	UnlockAllV2()
 end)
 
-SpamAllJump.Activated:Connect(function()
+JumpscareSpamButton.Activated:Connect(function()
 	local args = {
 		[1] = game:GetService("Players").LocalPlayer.Character.LowerTorso,
 		[2] = workspace:WaitForChild(game:GetService("Players").LocalPlayer.Name)
