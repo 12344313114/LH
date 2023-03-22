@@ -1356,6 +1356,25 @@ UICorner_29.Parent = Line
 UIAspectRatioConstraint.Parent = Main
 UIAspectRatioConstraint.AspectRatio = 16.193
 
+local function createStroke(ObjectForStroke)
+	local Stroke = Instance.new("UIStroke")
+	Stroke.Parent = ObjectForStroke
+	Stroke.Color = Color3.fromRGB(255, 255, 255)
+	Stroke.Transparency = 0.7
+	Stroke.Thickness = 2
+end
+
+for _,chipto in pairs(Chips:GetChildren()) do
+	if chipto:IsA("TextButton") then
+		createStroke(chipto)
+	end
+end
+createStroke(NametagTextArea1)
+createStroke(NametagTextArea2)
+createStroke(NametagTextArea2)
+createStroke(NametagTextArea4)
+createStroke(MusicTextArea)
+
 -- Scripts:
 
 local MainScreenGui = LH_MMA_FMRP
