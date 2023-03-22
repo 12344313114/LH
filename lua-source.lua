@@ -1372,7 +1372,7 @@ for _,chipto in pairs(Chips:GetChildren()) do
 end
 createStroke(NametagTextArea1)
 createStroke(NametagTextArea2)
-createStroke(NametagTextArea2)
+createStroke(NametagTextArea3)
 createStroke(NametagTextArea4)
 createStroke(MusicTextArea)
 
@@ -1582,11 +1582,9 @@ dragify(MainFrame)
 
 UnlockAllButton.Activated:Connect(function()
 	local function UnlockAllV2()
-		local Player = game.Players.LocalPlayer
-		local Character = Player.Character
 		local function UnlockDevCharacters()
 			local function Unlock()
-				local UIArea = Player.PlayerGui.MainMenu["Char_Frames"].Classic.Classic3
+				local UIArea = LPlayer.PlayerGui.MainMenu["Char_Frames"].Classic.Classic3
 				UIArea.Visible = true
 				for _, v in pairs(UIArea:GetChildren()) do
 					if v:IsA("ImageButton") then
@@ -1598,7 +1596,7 @@ UnlockAllButton.Activated:Connect(function()
 		end
 
 		local function UnlockOtherCharacters()
-			for _,v in pairs(Player.PlayerGui.MainMenu:GetDescendants()) do
+			for _,v in pairs(LPlayer.PlayerGui.MainMenu:GetDescendants()) do
 				if v:IsA("ImageButton") then
 					if v:FindFirstChild("Viewport")then
 						v.Image = ""
@@ -1614,7 +1612,6 @@ UnlockAllButton.Activated:Connect(function()
 			task.wait(1)
 		end)
 	end
-
 	UnlockAllV2()
 end)
 
@@ -1704,8 +1701,6 @@ local function MusicHandler()
 		playing = false
 		TextLabel_18.Text = "PLAY"
 	end)
-	
-	local MusicArea = MainScreenGui.Main.Pages.Music.Music
 end
 MusicHandler()
 
