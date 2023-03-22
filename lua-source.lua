@@ -1405,7 +1405,7 @@ end
 
 UIS.InputBegan:Connect(function(input)
 	if input.KeyCode == Enum.KeyCode.RightAlt then
-		MainFrame.Vislbe = not MainFrame.Visible
+		MainFrame.Visible = not MainFrame.Visible
 	end
 end)
 
