@@ -293,7 +293,7 @@ Title_2.Position = UDim2.new(0.430369765, 0, 0.216431409, 0)
 Title_2.Size = UDim2.new(0.437052518, 0, 0.56272167, 0)
 Title_2.ZIndex = 2
 Title_2.Font = Enum.Font.Unknown
-Title_2.Text = "V2.54.2"
+Title_2.Text = "V2.84.7"
 Title_2.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title_2.TextScaled = true
 Title_2.TextSize = 14.000
@@ -1693,6 +1693,7 @@ local function MusicHandler()
 	end)
 end
 coroutine.wrap(MusicHandler)()
+print("Music Loaded")
 local function NameTagAdvancerHandler()
 	local NametagActive = false
 	local function RainbowNameTag()
@@ -1794,11 +1795,15 @@ local function NameTagAdvancerHandler()
 end
 
 coroutine.wrap(NameTagAdvancerHandler)()
+print("Nametag Loaded")
 
 PageAndChipHandler()
 TopbarButtons()
 dragify(MainFrame)
+print("Core Loaded")
 
 OpenIY.MouseButton1Click:Connect(function()
 	loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
 end)
+print("IY Loaded")
+print("Fully Loaded")
