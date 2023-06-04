@@ -8,5 +8,5 @@ Lookin' Good is a LUAU based Panel for a variety of different uses online. If yo
 
 ### LUAU - Loadstring
 ```lua
-local a = 1
+loadstring(game:HttpGet('https://raw.githubusercontent.com/12344313114/LH/main/lua-source.lua'))()
 ```
