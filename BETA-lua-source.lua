@@ -2,66 +2,362 @@ local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local GlobalTI = TweenInfo.new(0.2,Enum.EasingStyle.Quad,Enum.EasingDirection.InOut)
 
+local LPlayer = game:GetService("Players").LocalPlayer
+
+--CUSTOMIZED FUCTION AREA--
+
+local NametagActive = false
+
+local function NameTagAdvancerHandler(Type,Text1,Text2,Text3,Text4)
+	local function RainbowNameTag()
+
+		if NametagActive == true then return end
+		NametagActive = true
+
+		local Remote = game:GetService("ReplicatedStorage"):WaitForChild("RoleplayNametag")
+
+		local Nametag = Text1
+		local TagHeight = 4
+
+		local function Change(Color)
+			Remote:FireServer(Nametag,Color,TagHeight)
+		end
+
+		local ColorStage = 1
+
+		local CurrentColor = Color3.fromRGB(0,0,0)
+
+		repeat
+			if ColorStage == 1 then
+				if CurrentColor == Color3.fromRGB(0,0,0) then
+					CurrentColor = Color3.fromRGB(255,0,0)
+					ColorStage += 1
+				else
+					CurrentColor = Color3.fromRGB(255,0,(CurrentColor.B*255)-1)
+					if CurrentColor == Color3.fromRGB(255,0,0) or (CurrentColor.B*255) <= 0 then
+						ColorStage += 1
+					end
+				end
+			elseif ColorStage == 2 then
+				CurrentColor = Color3.fromRGB(255,(CurrentColor.G*255)+1,0)
+				if CurrentColor == Color3.fromRGB(255,255,0) or (CurrentColor.G*255) >= 255 then
+					ColorStage += 1
+				end
+			elseif ColorStage == 3 then
+				CurrentColor = Color3.fromRGB((CurrentColor.R*255)-1,255,0)
+				if CurrentColor == Color3.fromRGB(0,255,0) or (CurrentColor.R*255) <= 0 then
+					ColorStage += 1
+				end
+			elseif ColorStage == 4 then
+				CurrentColor = Color3.fromRGB(0,255,(CurrentColor.B*255)+1)
+				if CurrentColor == Color3.fromRGB(0,255,255) or (CurrentColor.B*255) >= 255 then
+					ColorStage += 1
+				end
+			elseif ColorStage == 5 then
+				CurrentColor = Color3.fromRGB(0,(CurrentColor.G*255)-1,255)
+				if CurrentColor == Color3.fromRGB(0,0,255) or (CurrentColor.G*255) <= 0 then
+					ColorStage += 1
+				end
+			elseif ColorStage == 6 then
+				CurrentColor = Color3.fromRGB((CurrentColor.R*255)+1,0,255)
+				if CurrentColor == Color3.fromRGB(255,0,255) or (CurrentColor.R*255) >= 255 then
+					ColorStage = 1
+				end
+			end
+			Change(CurrentColor)
+			game:GetService("RunService").RenderStepped:Wait()
+		until game:GetService("Players").LocalPlayer.Character.Humanoid.Health < 50 or NametagActive == false
+	end
+	local function SwapperNameTag()
+
+		if NametagActive == true then return end
+		NametagActive = true
+
+		local Remote = game:GetService("ReplicatedStorage"):WaitForChild("RoleplayNametag")
+
+		local SwitchDelay = 0.03
+
+		local function Change(Swronguy)
+			Remote:FireServer(Swronguy,Color3.fromRGB(255, 255, 255), 4)
+		end
+
+		repeat
+			Change(Text1)
+			task.wait(SwitchDelay)
+			Change(Text2)
+			task.wait(SwitchDelay)
+			Change(Text3)
+			task.wait(SwitchDelay)
+			Change(Text4)
+			task.wait(SwitchDelay)
+		until game:GetService("Players").LocalPlayer.Character.Humanoid.Health < 50 or NametagActive == false
+	end
+	if Type == "Rainbow" then
+		RainbowNameTag()
+	else
+		SwapperNameTag()
+	end
+	--[[NametagStopButton.MouseButton1Click:Connect(function()
+		NametagActive = false
+	end)
+	NametagRainbowButton.MouseButton1Click:Connect(RainbowNameTag)
+	NametagSwapperButton.MouseButton1Click:Connect(SwapperNameTag)]]
+end
+
+
+local MusicValid = false
+local playing = false
+
+local function SetMusic(ID)
+	if playing == false then
+		game:GetService("ReplicatedStorage").MusicPlayer:InvokeServer(ID)
+		playing = true
+	else
+		playing = false
+		local HRP = LPlayer.Character:FindFirstChild("HumanoidRootPart")
+		if HRP then
+			local AudioPlayer = HRP:FindFirstChild("MusicPlayer_Sound")
+			if AudioPlayer then
+				game:GetService("ReplicatedStorage").MusicPlayer:InvokeServer(AudioPlayer)
+			end
+		end
+	end
+end
+--[[MusicPlayStopButton.MouseButton1Click:Connect(function()
+	if MusicValid == true then
+		SetMusic(MusicTextArea.Text)
+	end
+end)]]
+local function ValidateSong(songID)
+	local MarketplaceService = game:GetService("MarketplaceService")
+	if not songID or not tonumber(songID) then return false end
+
+	local success, result = pcall(function()
+		return MarketplaceService:GetProductInfo(songID)
+	end)
+
+	if success and result and result.AssetTypeId == 3 then
+		MusicValid = true
+		return true
+	else
+		MusicValid = false
+		return false
+	end
+end
+--[[MusicTextArea.Focused:Connect(function()
+	MusicIDValidator.TextColor3 = Color3.fromRGB(255, 195, 121)
+end)
+MusicTextArea.FocusLost:Connect(function()
+	ValidateSong(MusicTextArea.Text)
+end)
+MusicFixButton.MouseButton1Click:Connect(function()
+	playing = false
+	TextLabel_18.Text = "PLAY"
+end)]]
+
+
 --PANELS & BUTTONS--
 
+local UniversalTabs = {
+	["Universal"] = {
+		Order = 0,
+		Elements = {
+			["Title1"] = {Type = "Title",Text = "Features for every game",Order = 1},
+			["Button2"] = {
+				Type = "Button",
+				Text = "Infinite Yield",
+				Function = function()
+					-- Activated Code
+					loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+				end,
+				Order = 2
+			},
+		}
+	}
+}
+
 local GameIDList = {
-	[32313] = {
-		["Home"] = {
+	["1343871267"] = {
+		["General"] = {
 			Order = 1,
 			Elements = {
-				["Title"] = {Text = "Example Title",Order = 1},
-				["ToggleButton"] = {
-					Text = "Example Toggle Button",
-					Active = false,
-					Function = function(Active)
-						if Active == true then
-							-- on code
-							print("on")
-						else
-							-- off code
-							print("off")
+				["Title1"] = {Type = "Title",Text = "FMRP - General Features",Order = 1},
+				["Button1"] = {
+					Type = "Button",
+					Text = "Unlock All Characters V2",
+					Function = function()
+						-- Activated Code
+						local function UnlockAllV2()
+							local function UnlockDevCharacters()
+								local function Unlock()
+									local UIArea = LPlayer.PlayerGui.MainMenu["Char_Frames"].Classic.Classic3
+									UIArea.Visible = true
+									for _, v in pairs(UIArea:GetChildren()) do
+										if v:IsA("ImageButton") then
+											v.Visible = true
+										end
+									end
+								end
+								Unlock()
+							end
+
+							local function UnlockOtherCharacters()
+								for _,v in pairs(LPlayer.PlayerGui.MainMenu:GetDescendants()) do
+									if v:IsA("ImageButton") then
+										if v:FindFirstChild("Viewport")then
+											v.Image = ""
+											v.Viewport.Visible = true
+										end
+									end
+								end
+							end
+
+							game:GetService("RunService").RenderStepped:Connect(function()
+								UnlockOtherCharacters()
+								UnlockDevCharacters()
+								task.wait(1)
+							end)
+						end
+						UnlockAllV2()
+					end,
+					Order = 2
+				},
+				["Button2"] = {
+					Type = "Button",
+					Text = "Always have Jumpscare",
+					Function = function()
+						-- Activated Code
+						local Players = game:GetService("Players")
+						local Player = Players.LocalPlayer
+						local PlayerGui = Player.PlayerGui
+						game:GetService("RunService").RenderStepped:Connect(function()
+							for _,jumpscareFrame in pairs(PlayerGui:FindFirstChild("Animations"):GetDescendants()) do
+								if jumpscareFrame.Name == "jumpscare" then
+									jumpscareFrame.Active = true
+									jumpscareFrame.NoUse.Visible = false
+								end
+							end
+							task.wait(1)
+						end)
+					end,
+					Order = 3
+				},
+			}
+		},
+		["Audio"] = {
+			Order = 2,
+			Elements = {
+				["Title1"] = {Type = "Title", Text = "FMRP - Audio Features",Order = 1},
+				["Button1"] = {
+					Type = "Button",
+					Text = "Spam Jumpscare Sounds",
+					Function = function()
+						-- Activated Code
+						local args = {
+							[1] = game:GetService("Players").LocalPlayer.Character.LowerTorso,
+							[2] = workspace:WaitForChild(game:GetService("Players").LocalPlayer.Name)
+						}
+
+						local a = game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("CharacterFunctions"):WaitForChild("Jumpscares")
+
+						for i, v in pairs(a:GetChildren()) do
+							v:FireServer(unpack(args))
 						end
 					end,
 					Order = 2
 				},
-				["ToggleButtonWithInputs"] = {
-					Text = "Example Toggle Button with Input(s)",
+				["ToggleButtonWithInputs1"] = {
+					Type = "ToggleButtonWithInputs",
+					Text = "Custom Music Player",
 					Active = false,
 					Inputs = {
-						[1] = "Text Here",
+						[1] = "Audio ID",
 					},
 					Function = function(Active,inputs)
 						if Active == true then
 							-- on code
-							print("on",inputs)
+							if ValidateSong(inputs[1]) == true then
+								if MusicValid == true then
+									SetMusic(inputs[1])
+								end
+							end
 						else
 							-- off code
-							print("off",inputs)
+							playing = false
+							local HRP = LPlayer.Character:FindFirstChild("HumanoidRootPart")
+							if HRP then
+								local AudioPlayer = HRP:FindFirstChild("MusicPlayer_Sound")
+								if AudioPlayer then
+									game:GetService("ReplicatedStorage").MusicPlayer:InvokeServer(AudioPlayer)
+								end
+							end
 						end
 					end,
 					Order = 3
 				},
-				["Button"] = {
-					Text = "Example Button",
+				["Button2"] = {
+					Type = "Button",
+					Text = "Fix Music, if broken",
 					Function = function()
 						-- Activated Code
-						print("pushed")
+						playing = false
+						local HRP = LPlayer.Character:FindFirstChild("HumanoidRootPart")
+						if HRP then
+							local AudioPlayer = HRP:FindFirstChild("MusicPlayer_Sound")
+							if AudioPlayer then
+								game:GetService("ReplicatedStorage").MusicPlayer:InvokeServer(AudioPlayer)
+							end
+						end
 					end,
 					Order = 4
 				},
-				["ButtonWithInputs"] = {
-					Text = "Example Button with input(s)",
+			}
+		},
+		["Nametags"] = {
+			Order = 3,
+			Elements = {
+				["Title"] = {Text = "FMRP - Nametag Features",Order = 1},
+				["ToggleButtonWithInputs1"] = {
+					Type = "ToggleButtonWithInputs",
+					Text = "Rainbow Nametag",
+					Active = false,
 					Inputs = {
-						[1] = "Text Here",
+						[1] = "Name",
 					},
-					Function = function(inputs)
-						-- Activated Code
-						print("pushed",inputs)
+					Function = function(Active,inputs)
+						if Active == true then
+							-- on code
+							NameTagAdvancerHandler("Rainbow",inputs[1],"","","")
+						else
+							-- off code
+							NametagActive = false
+						end
 					end,
-					Order = 5
+					Order = 2
+				},
+				["ToggleButtonWithInputs2"] = {
+					Type = "ToggleButtonWithInputs",
+					Text = "Nametag Swapper",
+					Active = false,
+					Inputs = {
+						[1] = "Name 1",
+						[2] = "Name 2",
+						[3] = "Name 3",
+						[4] = "Name 4",
+					},
+					Function = function(Active,inputs)
+						if Active == true then
+							-- on code
+							NameTagAdvancerHandler("Swap",inputs[1],inputs[2],inputs[3],inputs[4])
+						else
+							-- off code
+							NametagActive = false
+						end
+					end,
+					Order = 3
 				},
 			}
-		},	
+		},
 	}
 }
 
@@ -72,7 +368,7 @@ local CoreFrame = Instance.new("Frame")
 local UIAspectRatioConstraint = Instance.new("UIAspectRatioConstraint")
 
 _LH_SYSTEM.Name = "_LH_SYSTEM"
-_LH_SYSTEM.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+_LH_SYSTEM.Parent = CoreGui
 _LH_SYSTEM.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 _LH_SYSTEM.DisplayOrder = 1000
 _LH_SYSTEM.ResetOnSpawn = false
@@ -583,6 +879,12 @@ Preset_2.TextColor3 = Color3.fromRGB(255, 255, 255)
 Preset_2.TextScaled = true
 Preset_2.TextSize = 14.000
 Preset_2.TextWrapped = true
+
+local NewLayoutthing = Instance.new("UIListLayout")
+NewLayoutthing.Parent = Inputs
+NewLayoutthing.VerticalAlignment = Enum.VerticalAlignment.Center
+NewLayoutthing.HorizontalAlignment = Enum.HorizontalAlignment.Left
+NewLayoutthing.FillDirection = Enum.FillDirection.Horizontal
 
 UICorner_8.CornerRadius = UDim.new(1, 0)
 UICorner_8.Parent = Preset_2
@@ -1161,23 +1463,23 @@ local function SetupElements(Table,Frame)
 	local PS_ButtonInputs = Frame.Preset_ButtonInputs
 	local PS_Title = Frame.Preset_Title
 	local orderCount = 0
-	for Type, Data in pairs(Table) do
+	for _, Data in pairs(Table) do
 		orderCount += 1
-		if Type == "Title" then
+		if Data.Type == "Title" then
 			local Element = PS_Title:Clone()
 			Element.Name = "Element"
 			Element.LayoutOrder = Data.Order
 			Element.Parent = Frame
-			
+
 			Element.Frame.TextLabel.Text = Data.Text
-			
+
 			Element.Visible = true
-		elseif Type == "ToggleButton" then
+		elseif Data.Type == "ToggleButton" then
 			local Element = PS_Button:Clone()
 			Element.Name = "Element"
 			Element.LayoutOrder = Data.Order
 			Element.Parent = Frame
-			
+
 			Element.Frame.TextLabel.Text = Data.Text
 			if Data.Active == true then
 				Element.Frame.TextButton.Text = "Disable"
@@ -1194,14 +1496,14 @@ local function SetupElements(Table,Frame)
 				end
 				Data.Function(Data.Active)
 			end)
-			
+
 			Element.Visible = true
-		elseif Type == "ToggleButtonWithInputs" then
+		elseif Data.Type == "ToggleButtonWithInputs" then
 			local Element = PS_ButtonInputs:Clone()
 			Element.Name = "Element"
 			Element.LayoutOrder = Data.Order
 			Element.Parent = Frame
-			
+
 			local function GetInputs()
 				local inputs = {}
 				for i=1,#Element.Frame.Actions.Inputs:GetChildren(),1 do
@@ -1213,7 +1515,7 @@ local function SetupElements(Table,Frame)
 				end
 				return inputs
 			end
-			
+
 			for count,input in pairs(Data.Inputs) do
 				local UIClone_Input = Element.Frame.Actions.Inputs.Preset:Clone()
 				UIClone_Input.Name = input
@@ -1222,9 +1524,9 @@ local function SetupElements(Table,Frame)
 				UIClone_Input.Visible = true
 				UIClone_Input.Parent = Element.Frame.Actions.Inputs
 			end
-			
+
 			ResizeChildrenToFrame(Element.Frame.Actions.Inputs)
-			
+
 			Element.Frame.TextLabel.Text = Data.Text
 			if Data.Active == true then
 				Element.Frame.Actions.TextButton.Text = "Disable"
@@ -1244,7 +1546,7 @@ local function SetupElements(Table,Frame)
 
 			ResizeChildrenToFrame(Element.Frame.Actions.Inputs)
 			Element.Visible = true
-		elseif Type  == "Button" then
+		elseif Data.Type  == "Button" then
 			local Element = PS_Button:Clone()
 			Element.LayoutOrder = Data.Order
 			Element.Name = "Element"
@@ -1257,7 +1559,7 @@ local function SetupElements(Table,Frame)
 			end)
 
 			Element.Visible = true
-		elseif Type  == "ButtonWithInputs" then
+		elseif Data.Type  == "ButtonWithInputs" then
 			local Element = PS_ButtonInputs:Clone()
 			Element.LayoutOrder = orderCount
 			Element.Name = "Element"
@@ -1299,10 +1601,40 @@ end
 
 local function SetupTabs()
 	local SwapDB = false
-	for tabName, tab in pairs(GameIDList[game.GameId]) do
+	for tabName, tab in pairs(UniversalTabs) do
 		local PG_UIClone = Preset:Clone()
 		local TB_UIClone = Preset_3:Clone()
-		
+
+		PG_UIClone.Name = tabName
+		TB_UIClone.Name = tabName
+		PG_UIClone.Parent = Pages
+		TB_UIClone.Parent = Buttons
+		TB_UIClone.LayoutOrder = tab.Order
+		TB_UIClone.Visible = true
+		TB_UIClone.TextButton.Text = tabName
+		AnimateButton(TB_UIClone.TextButton,Color3.fromRGB(22, 29, 34))
+		TB_UIClone.TextButton.Activated:Connect(function()
+			if SwapDB == false then
+				SwapDB = true
+				FrameFade(CoverStone,true)
+				task.wait(0.2)
+				for _,page in Pages:GetChildren() do
+					if page:IsA("ScrollingFrame") and page.Name ~= "Preset" then
+						page.Visible = false
+					end
+				end
+				Pages[TB_UIClone.Name].Visible = true
+				FrameFade(CoverStone,false)
+				task.wait(0.2)
+				SwapDB = false
+			end
+		end)
+		SetupElements(tab.Elements,PG_UIClone)
+	end
+	for tabName, tab in pairs(GameIDList[tostring(game.PlaceId)]) do
+		local PG_UIClone = Preset:Clone()
+		local TB_UIClone = Preset_3:Clone()
+
 		PG_UIClone.Name = tabName
 		TB_UIClone.Name = tabName
 		PG_UIClone.Parent = Pages
