@@ -1631,35 +1631,37 @@ local function SetupTabs()
 		end)
 		SetupElements(tab.Elements,PG_UIClone)
 	end
-	for tabName, tab in pairs(GameIDList[tostring(game.PlaceId)]) do
-		local PG_UIClone = Preset:Clone()
-		local TB_UIClone = Preset_3:Clone()
+	if GameIDList[tostring(game.PlaceId)] then
+		for tabName, tab in pairs(GameIDList[tostring(game.PlaceId)]) do
+			local PG_UIClone = Preset:Clone()
+			local TB_UIClone = Preset_3:Clone()
 
-		PG_UIClone.Name = tabName
-		TB_UIClone.Name = tabName
-		PG_UIClone.Parent = Pages
-		TB_UIClone.Parent = Buttons
-		TB_UIClone.LayoutOrder = tab.Order
-		TB_UIClone.Visible = true
-		TB_UIClone.TextButton.Text = tabName
-		AnimateButton(TB_UIClone.TextButton,Color3.fromRGB(22, 29, 34))
-		TB_UIClone.TextButton.Activated:Connect(function()
-			if SwapDB == false then
-				SwapDB = true
-				FrameFade(CoverStone,true)
-				task.wait(0.2)
-				for _,page in Pages:GetChildren() do
-					if page:IsA("ScrollingFrame") and page.Name ~= "Preset" then
-						page.Visible = false
+			PG_UIClone.Name = tabName
+			TB_UIClone.Name = tabName
+			PG_UIClone.Parent = Pages
+			TB_UIClone.Parent = Buttons
+			TB_UIClone.LayoutOrder = tab.Order
+			TB_UIClone.Visible = true
+			TB_UIClone.TextButton.Text = tabName
+			AnimateButton(TB_UIClone.TextButton,Color3.fromRGB(22, 29, 34))
+			TB_UIClone.TextButton.Activated:Connect(function()
+				if SwapDB == false then
+					SwapDB = true
+					FrameFade(CoverStone,true)
+					task.wait(0.2)
+					for _,page in Pages:GetChildren() do
+						if page:IsA("ScrollingFrame") and page.Name ~= "Preset" then
+							page.Visible = false
+						end
 					end
+					Pages[TB_UIClone.Name].Visible = true
+					FrameFade(CoverStone,false)
+					task.wait(0.2)
+					SwapDB = false
 				end
-				Pages[TB_UIClone.Name].Visible = true
-				FrameFade(CoverStone,false)
-				task.wait(0.2)
-				SwapDB = false
-			end
-		end)
-		SetupElements(tab.Elements,PG_UIClone)
+			end)
+			SetupElements(tab.Elements,PG_UIClone)
+		end
 	end
 	Preset.Visible = true
 	Preset.ZIndex = 10
