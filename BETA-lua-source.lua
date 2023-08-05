@@ -1631,7 +1631,7 @@ local function SetupTabs()
 		end)
 		SetupElements(tab.Elements,PG_UIClone)
 	end
-	if GameIDList[tostring(game.PlaceId)] then
+	if table.find(GameIDList,tostring(game.PlaceId)) then
 		for tabName, tab in pairs(GameIDList[tostring(game.PlaceId)]) do
 			local PG_UIClone = Preset:Clone()
 			local TB_UIClone = Preset_3:Clone()
