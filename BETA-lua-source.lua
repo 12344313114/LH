@@ -367,8 +367,18 @@ local _LH_SYSTEM = Instance.new("ScreenGui")
 local CoreFrame = Instance.new("Frame")
 local UIAspectRatioConstraint = Instance.new("UIAspectRatioConstraint")
 
+local Mouse = game.Players.LocalPlayer:GetMouse()
+
+local SpecialClickCircle = Instance.new("ImageLabel")
+SpecialClickCircle.BackgroundTransparency = 1
+SpecialClickCircle.Size = UDim2.fromScale(0,0)
+SpecialClickCircle.Position = UDim2.fromScale(0,0)
+SpecialClickCircle.ZIndex = 12
+SpecialClickCircle.ImageColor3 = Color3.fromRGB(0,0,0)
+SpecialClickCircle.Image = "rbxassetid://266543268"
+
 _LH_SYSTEM.Name = "_LH_SYSTEM"
-_LH_SYSTEM.Parent = CoreGui
+_LH_SYSTEM.Parent = script.Parent
 _LH_SYSTEM.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 _LH_SYSTEM.DisplayOrder = 1000
 _LH_SYSTEM.ResetOnSpawn = false
@@ -1428,6 +1438,37 @@ local function AnimateButton(Button:TextButton,OnColor)
 	end)
 	Button.MouseLeave:Connect(function()
 		OffTween:Play()
+	end)
+	Button.Activated:Connect(function()
+		local X,Y = Mouse.X,Mouse.Y
+		coroutine.resume(coroutine.create(function()
+
+			Button.ClipsDescendants = true
+
+			local SCCircle = SpecialClickCircle:Clone()
+			SCCircle.Parent = Button
+			local NewX = X - SCCircle.AbsolutePosition.X
+			local NewY = Y - SCCircle.AbsolutePosition.Y
+			SCCircle.Position = UDim2.new(0, NewX, 0, NewY)
+
+			local Size = 0
+			if Button.AbsoluteSize.X > Button.AbsoluteSize.Y then
+				Size = Button.AbsoluteSize.X*1.5
+			elseif Button.AbsoluteSize.X < Button.AbsoluteSize.Y then
+				Size = Button.AbsoluteSize.Y*1.5
+			elseif Button.AbsoluteSize.X == Button.AbsoluteSize.Y then																										Size = Button.AbsoluteSize.X*1.5
+			end
+
+			local Time = 0.5
+			SCCircle:TweenSizeAndPosition(UDim2.new(0, Size, 0, Size), UDim2.new(0.5, -Size/2, 0.5, -Size/2), "Out", "Quad", Time, false, nil)
+			SCCircle.ImageTransparency = 0.9
+			for i=1,10 do
+				SCCircle.ImageTransparency += 0.01
+				wait(Time/10)
+			end
+			SCCircle:Destroy()
+
+		end))
 	end)
 end
 
