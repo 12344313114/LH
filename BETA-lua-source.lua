@@ -378,7 +378,7 @@ SpecialClickCircle.ImageColor3 = Color3.fromRGB(0,0,0)
 SpecialClickCircle.Image = "rbxassetid://266543268"
 
 _LH_SYSTEM.Name = "_LH_SYSTEM"
-_LH_SYSTEM.Parent = script.Parent
+_LH_SYSTEM.Parent = game.CoreGui
 _LH_SYSTEM.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 _LH_SYSTEM.DisplayOrder = 1000
 _LH_SYSTEM.ResetOnSpawn = false
@@ -1672,7 +1672,7 @@ local function SetupTabs()
 		end)
 		SetupElements(tab.Elements,PG_UIClone)
 	end
-	if table.find(GameIDList,tostring(game.PlaceId)) then
+	if GameIDList[tostring(game.PlaceId)] then
 		for tabName, tab in pairs(GameIDList[tostring(game.PlaceId)]) do
 			local PG_UIClone = Preset:Clone()
 			local TB_UIClone = Preset_3:Clone()
