@@ -177,6 +177,225 @@ local UniversalTabs = {
 }
 
 local GameIDList = {
+	["13704594433"] = {
+		["General"] = {
+			Order = 1,
+			["Title1"] = {Type="Title",Text="The Storage - LH Features",Order=1},
+			["Button1"] = {
+				Type = "Button",
+				Text = "Rich ESP/Detector",
+				Function = function()
+					local function UpdateOverhead(Player)
+						local BillboardGui = Instance.new("BillboardGui")
+						local TextLabel = Instance.new("TextLabel")
+
+						BillboardGui.Parent = game.Workspace.Part
+						BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+						BillboardGui.Active = true
+						BillboardGui.LightInfluence = 1.000
+						BillboardGui.MaxDistance = 200.000
+						BillboardGui.Size = UDim2.new(1, 0, 1, 0)
+						BillboardGui.StudsOffset = Vector3.new(0, 7, 0)
+
+						TextLabel.Parent = BillboardGui
+						TextLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+						TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						TextLabel.BackgroundTransparency = 1.000
+						TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+						TextLabel.BorderSizePixel = 0
+						TextLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+						TextLabel.Size = UDim2.new(0, 500, 0, 50)
+						TextLabel.Font = Enum.Font.Unknown
+						TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+						TextLabel.TextScaled = true
+						TextLabel.TextSize = 14.000
+						TextLabel.Text = "Waiting"
+						TextLabel.TextWrapped = true
+						BillboardGui.AlwaysOnTop = true
+						if Player.Character then
+							if Player.Character:FindFirstChild("Head") then
+								if Player.Character.Head:FindFirstChild("BillboardGui") then
+									Player.Character.Head:FindFirstChild("BillboardGui"):Destroy()
+								end
+								BillboardGui.Adornee = Player.Character.Head
+								BillboardGui.Parent = Player.Character.Head
+							end
+						end
+						if Player:FindFirstChild("Data") and Player.Data:FindFirstChild("Items") then
+							local Loot = Player.Data.Items:GetChildren()
+							local TotalLoot = #Loot
+							if TotalLoot >= 30 then
+								TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+								TextLabel.Text = "Mega Rich"
+							elseif TotalLoot >= 25 then
+								TextLabel.TextColor3 = Color3.fromRGB(255, 81, 0)
+								TextLabel.Text = "Super Rich"
+							elseif TotalLoot >= 20 then
+								TextLabel.TextColor3 = Color3.fromRGB(255, 140, 0)
+								TextLabel.Text = "Very Rich"
+							elseif TotalLoot >= 15 then
+								TextLabel.TextColor3 = Color3.fromRGB(255, 195, 55)
+								TextLabel.Text = "Rich"
+							elseif TotalLoot >= 10 then
+								TextLabel.TextColor3 = Color3.fromRGB(196, 255, 101)
+								TextLabel.Text = "Decent"
+							elseif TotalLoot >= 5 then
+								TextLabel.TextColor3 = Color3.fromRGB(255, 234, 170)
+								TextLabel.Text = "Poor"
+							elseif TotalLoot <= 4 then
+								TextLabel.TextColor3 = Color3.fromRGB(255, 245, 205)
+								TextLabel.Text = "Dirt Poor"
+							else
+								TextLabel.TextColor3 = Color3.fromRGB(255, 245, 205)
+								TextLabel.Text = "Dirt Poor"
+							end
+							local lightAmmoS = 0
+							local lightAmmoP = 0
+							local mediumAmmoS = 0
+							local mediumAmmoP = 0
+							local shotAmmoS = 0
+							local shotAmmoP = 0
+							for _,item in pairs(Loot) do
+								if item.Name == "Revolver" then
+									TextLabel.Text = TextLabel.Text.." | Rev("..item.Quantity.Value..")"
+								end
+								if item.Name == "SMG" then
+									TextLabel.Text = TextLabel.Text.." | SMG("..item.Quantity.Value..")"
+								end
+								if item.Name == "AK47" then
+									TextLabel.Text = TextLabel.Text.." | AK47("..item.Quantity.Value..")"
+								end
+								if item.Name == "Shotgun" then
+									TextLabel.Text = TextLabel.Text.." | ShotG("..item.Quantity.Value..")"
+								end
+								if item.Name == "Light Ammo" then
+									lightAmmoS = item.Quantity.Value
+								end
+								if item.Name == "Light Ammo Pack" then
+									lightAmmoP = item.Quantity.Value
+								end
+								if item.Name == "Medium Ammo" then
+									mediumAmmoS = item.Quantity.Value
+								end
+								if item.Name == "Medium Ammo Pack" then
+									mediumAmmoP = item.Quantity.Value
+								end
+								if item.Name == "Shotgun Ammo" then
+									shotAmmoS = item.Quantity.Value
+								end
+								if item.Name == "Shotgun Ammo Pack" then
+									shotAmmoP = item.Quantity.Value
+								end
+							end
+							TextLabel.Text = TextLabel.Text.." | LA("..lightAmmoP.."/"..lightAmmoS.."//"..(lightAmmoP*50)+lightAmmoS..")"
+							TextLabel.Text = TextLabel.Text.." | MA("..mediumAmmoP.."/"..mediumAmmoS.."//"..(mediumAmmoP*50)+mediumAmmoS..")"
+							TextLabel.Text = TextLabel.Text.." | SA("..shotAmmoP.."/"..shotAmmoS.."//"..(shotAmmoP*50)+shotAmmoS..")"
+						end
+					end
+
+					while true do
+						for _,player in game.Players:GetPlayers() do
+							UpdateOverhead(player)
+							task.wait(0.2)
+						end
+						task.wait(10)
+					end
+				end,
+				Order = 2
+			},
+			["Button2"] = {
+				Type = "Button",
+				Text = "NPC/MOB ESP",
+				Function = function()
+					local function CreateMobEsp(mob:Model)
+						for _,part in mob:GetChildren() do
+							if part:IsA("BasePart") then
+								local BHA = Instance.new("BoxHandleAdornment")
+								BHA.Parent =  part
+								BHA.Adornee = part
+								BHA.Size = part.Size + Vector3.new(0.1, 0.1, 0.1)
+								BHA.ZIndex = 10
+								BHA.AlwaysOnTop = true
+								BHA.Transparency = 0.3
+								BHA.Color3 = Color3.fromRGB(255,0,0)
+							end
+						end	
+					end
+
+					for _,mob in workspace.Mobs:GetChildren() do
+						CreateMobEsp(mob)
+					end
+					workspace.Mobs.ChildAdded:Connect(CreateMobEsp)
+				end,
+				Order = 3
+			},
+			["Button3"] = {
+				Type = "Button",
+				Text = "Instant Interact + Loot Aura",
+				Function = function()
+					local function PromptHandler(prompt:ProximityPrompt)
+						prompt.PromptShown:Connect(function()
+							if prompt.Parent.Parent.Name == "Loot" then
+								fireproximityprompt(prompt)
+							end
+						end)
+					end
+
+					for _,prompt in workspace:GetDescendants() do
+						if prompt:IsA("ProximityPrompt") then
+							prompt.HoldDuration = 0
+							PromptHandler(prompt)
+						end
+					end
+
+					workspace.DescendantAdded:Connect(function(object)
+						if object:IsA("ProximityPrompt") then
+							object.HoldDuration = 0
+							PromptHandler(object)
+						end
+					end)
+					local function createEsp(object)
+						local hl = Instance.new("Highlight")
+						hl.Parent = object
+						hl.Adornee = object
+						hl.OutlineColor = Color3.new(1,0,0)
+						hl.FillColor = Color3.new(1,0,0)
+					end
+					for _,object in workspace.Mobs:GetChildren() do
+						createEsp(object)
+					end
+					workspace.Mobs.ChildAdded:Connect(createEsp)
+				end,
+				Order = 4
+			},
+			["Button4"] = {
+				Type = "Button",
+				Text = "Sell All Loot",
+				Function = function()
+					local Collector = workspace:FindFirstChild("The Collector",true)
+					if Collector then
+						local plr = game.Players.LocalPlayer
+						local OldPos = plr.Character.HumanoidRootPart.CFrame
+						local NewPos = Collector.HumanoidRootPart.CFrame
+						plr.Character.HumanoidRootPart.CFrame = NewPos
+						task.wait(0.3)
+						for _,tool in game.Players.LocalPlayer.Backpack:GetChildren() do
+							local ItemName = tool.Name
+							if string.find(ItemName," %[") then
+								ItemName = string.split(ItemName," [")[1]
+							end
+							if Collector then
+								game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellItem",ItemName,Collector)
+							end
+						end
+						task.wait(1)
+						plr.Character.HumanoidRootPart.CFrame = OldPos
+					end
+				end,
+				Order = 5
+			},
+		}
+	},
 	["1343871267"] = {
 		["General"] = {
 			Order = 1,
