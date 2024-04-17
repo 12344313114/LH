@@ -13,5 +13,5 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/12344313114/LH/main/l
 
 ### LUAU - Loadstring [BETA VERSION]
 ```lua
-loadstring(game:HttpGet('https://raw.githubusercontent.com/12344313114/LH/main/BETA-lua-source.lua'))()
+-- Sorry, this is not out yet!
 ```
