@@ -7,11 +7,11 @@ Lookin' Good is a LUAU based Panel for a variety of different uses online. If yo
 
 
 ### LUAU - Loadstring
-```lua
+```luau
 loadstring(game:HttpGet('https://raw.githubusercontent.com/12344313114/LH/main/lua-source.lua'))()
 ```
 
 ### LUAU - Loadstring [BETA VERSION]
-```lua
+```luau
 -- Sorry, this is not out yet!
 ```
